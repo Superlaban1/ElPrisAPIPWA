@@ -1,0 +1,27 @@
+Positioning:
+Hvis du skal positionere en hero section
+skal sektionen være relative og tingene inden i skal være absolute aka image og h1
+
+Grid:
+Hvis det teksten skal være i middet være ca sådan her
+
+HTML
+
+section
+    img
+    h1
+/section
+
+CSS
+
+section{
+    display grid
+}
+img{
+    grid-area 1/1
+}
+h1{
+    grid area 1/1
+    justify-self center
+    align self center
+}

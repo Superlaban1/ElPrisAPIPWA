@@ -1,0 +1,3 @@
+starte med at finde hvad der kan komme i en :root
+efter det skimmer jeg igennem teksten efter fx form
+eller begynder jeg at skrive html i den rækkefølge som jeg føler det skal stå i 

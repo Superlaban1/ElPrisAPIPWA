@@ -1,0 +1,73 @@
+const btnopen = document.getElementById("open");
+const btnclose = document.getElementById("close");
+const modal = document.getElementById("Modal");
+
+const firstname = document.getElementById("FName");
+const lastname = document.getElementById("LName");
+const address = document.getElementById("Address");
+const postalNumber = document.getElementById("Post");
+const email = document.getElementById("Mail");
+const btnsubmit = document.getElementById("submit");
+const form = document.getElementById("Formvalidate");
+
+function openModal() {
+  modal.classList.toggle("hidden")
+  modal.classList.toggle("modal-overlay")
+} 
+
+function closeModal() {
+  modal.classList.toggle("hidden")
+  modal.classList.toggle("modal-overlay")
+}
+
+btnopen.addEventListener("click", openModal);
+btnclose.addEventListener("click", closeModal);
+
+modal.addEventListener("click", function (event) {
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+
+function validate(){
+  if (firstname.value.length >= 2){
+      firstname.style.backgroundColor = "lightgreen"
+  }
+  else {
+      firstname.style.backgroundColor = "salmon"
+  }
+
+  if (lastname.value.length >= 2){
+      lastname.style.backgroundColor = "lightgreen"
+  }
+  else {
+      lastname.style.backgroundColor = "salmon"
+  }
+
+  if (address.value.length >= 5){
+      address.style.backgroundColor = "lightgreen"
+  }
+  else {
+      address.style.backgroundColor = "salmon"
+  }
+
+  if (Number.isFinite(Number(postalNumber.value))){
+      postalNumber.style.backgroundColor = "lightgreen"
+  }
+  else {
+      postalNumber.style.backgroundColor = "salmon"
+  }
+
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { 
+      email.style.backgroundColor = "lightgreen"
+  }
+  else {
+      email.style.backgroundColor = "salmon"
+  }
+}
+
+btnsubmit.addEventListener("click", validate);
+
+form.querySelectorAll("input").forEach(input => {
+  input.addEventListener("input", () => input.style.backgroundColor = "");
+});

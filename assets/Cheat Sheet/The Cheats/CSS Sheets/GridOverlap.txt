@@ -1,0 +1,26 @@
+hvis man vil have at noget skal deles op i flere stykker bruger man fr
+
+lad os bruge grid columns som et eksempel
+grid-template-columns: 1fr 2fr 1fr
+tænk at hvert tal i er mængden af sektioner er opdeles i mængden af fr der er 
+tallet der foran fr er hvor meget den del skal tage som at dele en kage op i 4 stykker og 1 person får 2 af dem 
+rækkefølgen er fra venstre til højre/top til bund
+
+section{
+    display: grid;
+    grid-template-columns: 3fr 1fr 3fr;
+    grid-template-rows: 3fr 1fr 3fr;
+}
+#overlapping{
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 4;
+    z-index: 1;
+}
+#overlapped{
+    grid-row-start: 2;
+    grid-row-end: 4;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}

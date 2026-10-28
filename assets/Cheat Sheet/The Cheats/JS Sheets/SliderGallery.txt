@@ -1,0 +1,33 @@
+Start med at få elementerne:
+
+const slides = document.querySelectorAll('.slide');
+const nextBtn = document.querySelector('.next');
+const prevBtn = document.querySelector('.prev');
+let currentIndex = 0;
+
+Lav en funktion, der skjuler alle slides og viser den aktive:
+
+function showSlide(index) {
+  slides.forEach(slide => slide.classList.add('hidden'));
+  slides[index].classList.remove('hidden');
+}
+
+Næste og forrige-knapper ændrer currentIndex:
+
+nextBtn.addEventListener('click', function() {
+  currentIndex = (currentIndex + 1) % slides.length;
+  showSlide(currentIndex);
+});
+
+prevBtn.addEventListener('click', function() {
+  currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+  showSlide(currentIndex);
+});
+
+Start med at vise første slide:
+
+showSlide(currentIndex);
+
+Hvis du vil lave automatisk kørsel, kan du bruge setInterval til at skifte slide hvert par sekunder.
+
+Husk at HTML skal have en wrapper med slides og knapper, og CSS skal skjule ikke-aktive slides.

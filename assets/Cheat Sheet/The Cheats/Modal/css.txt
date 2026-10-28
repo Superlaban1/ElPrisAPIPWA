@@ -1,0 +1,30 @@
+.hidden {
+  display: none;
+}
+
+
+.modal-overlay {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+
+.modal-box {
+  background: white;
+  width: 90%;
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+}
+#Formvalidate{
+    display: flex;
+    flex-direction: column;
+}
+

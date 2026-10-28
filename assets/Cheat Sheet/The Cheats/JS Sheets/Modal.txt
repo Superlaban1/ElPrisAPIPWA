@@ -1,0 +1,22 @@
+start igen med at få den ind i javascript
+
+ude på siden er der en knap til at åbne og inde i modalen er der en knap til at lukke
+
+function openModal() {
+  modal.classList.toggle("hidden")
+  modal.classList.toggle("modal-overlay")
+} 
+
+function closeModal() {
+  modal.classList.toggle("hidden")
+  modal.classList.toggle("modal-overlay")
+}
+
+btnopen.addEventListener("click", openModal);
+btnclose.addEventListener("click", closeModal);
+
+modal.addEventListener("click", function (event) {
+  if (event.target === modal) {
+    closeModal();
+  }
+});

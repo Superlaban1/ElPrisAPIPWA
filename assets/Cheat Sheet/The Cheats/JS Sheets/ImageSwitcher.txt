@@ -1,0 +1,27 @@
+Start med at få elementerne
+
+Dette var den Switcher jeg brugte til Spicy
+
+imgOne.addEventListener("click", function() {
+    let temp = mainImage.src;
+    mainImage.src = imgOne.src;
+    imgOne.src = temp;
+});
+
+imgTwo.addEventListener("click", function() {
+    let temp = mainImage.src;
+    mainImage.src = imgTwo.src;
+    imgTwo.src = temp;
+});
+
+imgThree.addEventListener("click", function() {
+    let temp = mainImage.src;
+    mainImage.src = imgThree.src;
+    imgThree.src = temp;
+});
+
+imgFour.addEventListener("click", function() {
+    let temp = mainImage.src;
+    mainImage.src = imgFour.src;
+    imgFour.src = temp;
+});

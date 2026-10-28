@@ -1,0 +1,9 @@
+jeg har det ok med fx artikler og figures så det har jeg ikke brug får
+  
+men jeg har brug for at fra starten vælge om jeg skal grid/flex eller positionere
+
+det vil være fint at have en færdig form validering + en non styled basic form og andre former for js som jeg eventuelt vil have brug for
+
+HTML: Done
+CSS: positionering, grid line/fractions (til overlap), adaptiv med breakpoints, billed skalering
+JS: færdig form validering, image switcher, slider gallery, modal 

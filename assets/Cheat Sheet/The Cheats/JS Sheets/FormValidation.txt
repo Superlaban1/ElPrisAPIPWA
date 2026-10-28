@@ -1,0 +1,15 @@
+Start med at få elementerne
+
+Dette var den validering jeg brugte til Spicy
+
+button.addEventListener("click", () => {
+    let nameValue = nameInput.value;
+    let tlfValue = tlfInput.value;
+    let mailValue = mailInput.value; 
+    console.log(nameValue, tlfValue, mailValue); //for at checke om dataen er der
+if (nameValue.length >= 2 && tlfValue.length == 8 && mailValue == "email@email.com") {
+    alert("Velkommen!");
+}
+else{
+    alert("unable to validate. make sure all the information is correct");
+}})

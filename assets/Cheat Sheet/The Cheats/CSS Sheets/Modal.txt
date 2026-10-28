@@ -1,0 +1,19 @@
+.hidden{
+    display: hidden;
+}
+
+.modal-overlay {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+dette er bare hvad der er brugt når modal er vist
+
+hidden er klassen på den div som modal-overlay er inden i 
+
+check videre i JS Sheets Modal.txt
