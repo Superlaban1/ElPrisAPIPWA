@@ -1,0 +1,12 @@
+{
+    "name": "ElPriser",
+    "start_url": "./",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "./assets/img/appIcons/mainIcon.svg",
+            "sizes": "any",
+            "type": "image/svg"
+        }
+    ]
+}
