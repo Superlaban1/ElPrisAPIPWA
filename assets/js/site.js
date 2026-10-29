@@ -28,23 +28,19 @@ function readerStatic(appID) {
         <div id="brand">
             <img src="assets/img/appIcons/mainIcon.svg" alt="">
         </div>
-        <section id="heading">
+        <nav id="heading">
             <button type="button" data-view="overview">OVERSIGT</button>
             <button type="button" data-view="rightnow">LIGE NU</button>
             <button type="button" data-view="history">HISTORIK</button>
-        </section>
+        </nav>
         <section id="setting">
-            <button id="settings-toggle" type="button" aria-controls="settings-modal">
+            <button id="settings-toggle" type="button">
                 <img src="assets/img/miscICONS/gear-solid-full.svg" alt="">
             </button>
-            <div id="settings-modal" class="settings-modal" hidden></div>
         </section>
     `;
     const settingsButton = navheader.querySelector("#settings-toggle");
-    const settingsModal = navheader.querySelector("#settings-modal");
     const navigationButtons = navheader.querySelectorAll("#heading button");
-    const mobileView = window.matchMedia("(max-width: 760px)");
-
     const footer = document.createElement("footer");
     footer.innerHTML = `
         <p>Priserne er <span class="highlighted" id="tax-status">ex. moms</span> og afgifter</p>
@@ -76,21 +72,9 @@ function readerStatic(appID) {
         }
     }
 
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !settingsModal.hidden) {
-            settingsModal.hidden = true;
-        }
-    });
-
     appContainer.appendChild(navheader);
-    const overview = createOverview();
-    appContainer.appendChild(overview);
-    const rightNow = createRightNow();
-    appContainer.appendChild(rightNow);
-    const history = createHistory();
-    appContainer.appendChild(history);
-
     const settingsPage = document.createElement("main");
+    settingsPage.id = "settings-page";
     settingsPage.className = "settings-page";
     settingsPage.hidden = true;
     const settings = createSettings();
@@ -99,12 +83,19 @@ function readerStatic(appID) {
     closeButton.type = "button";
     closeButton.innerHTML = '<img src="assets/img/miscICONS/circle-xmark-regular-full.svg" alt="">';
     closeButton.addEventListener("click", () => {
-        settingsModal.hidden = true;
+        showView(previousView);
     });
     settings.appendChild(closeButton);
-    settingsModal.appendChild(settings);
+    settingsPage.appendChild(settings);
     appContainer.appendChild(settingsPage);
+
+    const overview = createOverview();
+    const rightNow = createRightNow();
+    const history = createHistory();
+
+    appContainer.append(overview, rightNow, history);
     appContainer.appendChild(footer);
+    appContainer.insertBefore(settingsPage, footer);
 
     const views = {
         overview: overview,
@@ -114,21 +105,26 @@ function readerStatic(appID) {
     };
     let previousView = "overview";
 
-    function showMobileView(name) {
+    let activeView = "overview";
+
+    function showView(name) {
         for (const viewName in views) {
             views[viewName].hidden = viewName !== name;
         }
 
         for (const button of navigationButtons) {
-            button.classList.toggle("active", button.dataset.view === name);
+            button.classList.toggle("active", button.dataset.view === (name === "settings" ? previousView : name));
         }
+
+        if (name !== "settings") {
+            previousView = name;
+        }
+        activeView = name;
     }
 
     for (const button of navigationButtons) {
         button.addEventListener("click", () => {
-            if (mobileView.matches) {
-                showMobileView(button.dataset.view);
-            }
+            showView(button.dataset.view);
         });
     }
 
@@ -141,55 +137,18 @@ function readerStatic(appID) {
         }
     });
 
-    let currentMobileView = null;
-    mobileQueryChange();
-    mobileView.addEventListener("change", mobileQueryChange);
-    window.addEventListener("resize", mobileQueryChange);
-
-    function mobileQueryChange() {
-        if (currentMobileView === mobileView.matches) {
-            return;
-        }
-
-        currentMobileView = mobileView.matches;
-        if (mobileView.matches) {
-            showMobileView("overview");
-        } else {
-            for (const viewName in views) {
-                views[viewName].hidden = viewName === "settings";
-            }
-            for (const button of navigationButtons) {
-                button.classList.remove("active");
-            }
-        }
-    }
-
     settingsButton.addEventListener("click", () => {
-        if (mobileView.matches) {
-            if (settingsPage.hidden) {
-                previousView = Object.keys(views).find((name) => !views[name].hidden) || "overview";
-                settingsPage.appendChild(settings);
-                settingsModal.hidden = true;
-                showMobileView("settings");
-            } else {
-                showMobileView(previousView);
-            }
-        } else {
-            settingsModal.appendChild(settings);
-            for (const viewName in views) {
-                views[viewName].hidden = viewName === "settings";
-            }
-            settingsModal.hidden = !settingsModal.hidden;
-        }
+        showView(activeView === "settings" ? previousView : "settings");
         updateFooter();
     });
 
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && mobileView.matches && !settingsPage.hidden) {
-            showMobileView(previousView);
+        if (event.key === "Escape" && activeView === "settings") {
+            showView(previousView);
         }
     });
 
+    showView("overview");
     updateFooter();
 }
 readerStatic("appID");

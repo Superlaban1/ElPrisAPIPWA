@@ -29,5 +29,17 @@ export function createSettings() {
         </div>
     `;
 
+    const region = settings.querySelector("#region");
+    const includeTax = settings.querySelector("#include-tax");
+    region.value = localStorage.getItem("region") || "";
+    includeTax.checked = localStorage.getItem("includeTax") === "true";
+
+    region.addEventListener("change", () => {
+        localStorage.setItem("region", region.value);
+    });
+    includeTax.addEventListener("change", () => {
+        localStorage.setItem("includeTax", includeTax.checked);
+    });
+
     return settings;
 }
