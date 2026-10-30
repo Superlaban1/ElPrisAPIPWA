@@ -1,3 +1,5 @@
+import { getTodayDate, loadPrices, renderPriceRows } from "./loadprices.js";
+
 export function createHistory() {
     const history = document.createElement("main");
     history.className = "history";
@@ -13,8 +15,7 @@ export function createHistory() {
     const dateInput = history.querySelector("#history-date");
     const dateLabel = history.querySelector("#history-date-label");
     const priceList = history.querySelector(".history__prices");
-    const today = new Date();
-    dateInput.value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    dateInput.value = getTodayDate();
 
     function updateDateLabel() {
         if (!dateInput.value) {
@@ -26,7 +27,7 @@ export function createHistory() {
         dateLabel.textContent = `ELPRISERNE D. ${date[2]}-${date[1]}-${date[0]}`;
     }
 
-    async function loadPrices() {
+    async function updateHistory() {
         if (dateInput.value === "") {
             priceList.innerHTML = "<li>Vælg en dato.</li>";
             return;
@@ -38,41 +39,13 @@ export function createHistory() {
             return;
         }
 
-        const date = dateInput.value.split("-");
-        const zone = region.value === "east" ? "DK2" : "DK1";
-        const url = `https://www.elprisenligenu.dk/api/v1/prices/${date[0]}/${date[1]}-${date[2]}_${zone}.json`;
         priceList.innerHTML = "<li>Henter priser...</li>";
 
         try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Price request failed: ${response.status}`);
-            }
-
-            const prices = await response.json();
+            const prices = await loadPrices(dateInput.value, region.value);
             const includeTax = document.querySelector("#include-tax");
-            priceList.innerHTML = "";
-
-            for (const price of prices) {
-                let value = price.DKK_per_kWh;
-                if (includeTax !== null && includeTax.checked) {
-                    value *= 1.25;
-                }
-
-                let level = "high";
-                if (value < 0.3) {
-                    level = "low";
-                } else if (value < 0.5) {
-                    level = "medium";
-                }
-
-                priceList.innerHTML += `
-                    <li class="history__price">
-                        <span>kl. ${price.time_start.slice(11, 16)}</span>
-                        <span class="price ${level}">${value.toFixed(3)} kr</span>
-                    </li>
-                `;
-            }
+            const addTax = includeTax !== null && includeTax.checked;
+            priceList.innerHTML = renderPriceRows(prices, "history__price", addTax);
         } catch (error) {
             console.error("Could not load history prices:", error);
             priceList.innerHTML = "<li>Kunne ikke hente priserne.</li>";
@@ -81,11 +54,11 @@ export function createHistory() {
 
     dateInput.addEventListener("change", () => {
         updateDateLabel();
-        loadPrices();
+        updateHistory();
     });
-    history.addEventListener("settingschange", loadPrices);
+    history.addEventListener("settingschange", updateHistory);
 
     updateDateLabel();
-    loadPrices();
+    updateHistory();
     return history;
 }

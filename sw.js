@@ -1,5 +1,5 @@
 // The name of our cache
-const CACHE = "static-v5";
+const CACHE = "static-v6";
 
 // static files til offline brug
 const FILES = [
@@ -10,11 +10,11 @@ const FILES = [
   "./assets/js/components/overview.js",
   "./assets/js/components/rightnow.js",
   "./assets/js/components/history.js",
+  "./assets/js/components/loadprices.js",
   "./assets/js/components/settings.js",
   "./assets/img/appIcons/mainIcon.svg",
   "./assets/img/gyattmanden.jpg",
   "./assets/img/miscICONS/gear-solid-full.svg",
-  "./assets/img/miscICONS/circle-xmark-regular-full.svg",
   "./manifest.json",
 ];
 

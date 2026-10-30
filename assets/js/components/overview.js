@@ -1,3 +1,5 @@
+import { getPriceRange, getTodayDate, loadPrices, renderPriceRows } from "./loadprices.js";
+
 export function createOverview() {
     const overview = document.createElement("main");
     overview.className = "overview";
@@ -23,78 +25,28 @@ export function createOverview() {
     const status = overview.querySelector("#overview-status");
     const priceList = overview.querySelector(".overview__prices");
 
-    async function loadPrices() {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, "0");
-        const day = String(today.getDate()).padStart(2, "0");
-        const date = `${year}-${month}-${day}`;
+    async function updateOverview() {
+        const date = getTodayDate();
         const region = document.querySelector("#region");
-        let zone = "DK1";
-
-        if (region !== null && region.value === "") {
-            zone = "DK1";
-        } else if (region !== null && region.value === "east") {
-            zone = "DK2";
-        }
-
-        const url = `https://www.elprisenligenu.dk/api/v1/prices/${year}/${month}-${day}_${zone}.json`;
+        const selectedRegion = region === null || region.value === "" ? "west" : region.value;
         status.textContent = "Henter dagens priser...";
 
         try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Price request failed: ${response.status}`);
-            }
-
-            const prices = await response.json();
+            const prices = await loadPrices(date, selectedRegion);
             if (prices.length === 0) {
                 status.textContent = "Der er ingen priser for denne dato.";
                 return;
             }
 
             const includeTax = document.querySelector("#include-tax");
-            let lowest = prices[0].DKK_per_kWh;
-            let highest = prices[0].DKK_per_kWh;
+            const addTax = includeTax !== null && includeTax.checked;
+            const range = getPriceRange(prices, addTax);
 
-            for (const price of prices) {
-                if (price.DKK_per_kWh < lowest) {
-                    lowest = price.DKK_per_kWh;
-                }
-                if (price.DKK_per_kWh > highest) {
-                    highest = price.DKK_per_kWh;
-                }
-            }
-
-            if (includeTax !== null && includeTax.checked) {
-                lowest *= 1.25;
-                highest *= 1.25;
-            }
-
-            lowestPrice.textContent = `${lowest.toFixed(3)} KR`;
-            highestPrice.textContent = `${highest.toFixed(3)} KR`;
-            priceList.innerHTML = "";
-
-            for (const price of prices) {
-                let value = price.DKK_per_kWh;
-                if (includeTax !== null && includeTax.checked) {
-                    value *= 1.25;
-                }
-
-                let level = "high";
-                if (value < 0.3) {
-                    level = "low";
-                } else if (value < 0.5) {
-                    level = "medium";
-                }
-
-                priceList.innerHTML += `
-                    <li class="overview__price">
-                        <span>kl. ${price.time_start.slice(11, 16)}</span>
-                        <span class="price ${level}">${value.toFixed(3)} kr</span>
-                    </li>
-                `;
-            }
+            lowestPrice.textContent = `${range.lowest.toFixed(3)} KR`;
+            highestPrice.textContent = `${range.highest.toFixed(3)} KR`;
+            lowestPrice.className = "level-1";
+            highestPrice.className = range.highest === range.lowest ? "level-1" : "level-8";
+            priceList.innerHTML = renderPriceRows(prices, "overview__price", addTax);
 
             status.textContent = "";
         } catch (error) {
@@ -103,7 +55,7 @@ export function createOverview() {
         }
     }
 
-    overview.addEventListener("settingschange", loadPrices);
-    loadPrices();
+    overview.addEventListener("settingschange", updateOverview);
+    updateOverview();
     return overview;
 }

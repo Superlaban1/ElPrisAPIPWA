@@ -11,16 +11,16 @@ export function createSettings() {
                     <span></span>
                 </span>
             </label>
-            <label class="settings__row" for="lowest-price-alarm">
+            <label class="settings__row">
                 <span>LAVESTE PRIS ALARM</span>
                 <span class="settings__switch">
-                    <input id="lowest-price-alarm" type="checkbox" checked>
+                    <input id="lowest-price-alarm" type="checkbox">
                     <span></span>
                 </span>
             </label>
-            <label class="settings__row" for="region">
+            <label class="settings__row">
                 <span>VÆLG REGION</span>
-                <select class="settings__region" id="region" name="region">
+                <select class="settings__region" id="region">
                     <option value="" selected disabled>VÆLG REGION</option>
                     <option value="east">REGION ØST</option>
                     <option value="west">REGION VEST</option>
@@ -31,8 +31,8 @@ export function createSettings() {
 
     const region = settings.querySelector("#region");
     const includeTax = settings.querySelector("#include-tax");
-    region.value = localStorage.getItem("region") || "";
-    includeTax.checked = localStorage.getItem("includeTax") === "true";
+    region.value = localStorage.getItem("region") || ""; /*explain get item*/
+    includeTax.checked = localStorage.getItem("includeTax") === "true"; /*explain get item*/
 
     region.addEventListener("change", () => {
         localStorage.setItem("region", region.value);

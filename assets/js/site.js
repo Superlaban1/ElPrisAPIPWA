@@ -3,24 +3,8 @@ import { createOverview } from "./components/overview.js";
 import { createRightNow } from "./components/rightnow.js";
 import { createSettings } from "./components/settings.js";
 
-async function fetchdata() {
-	try {
-		const response = await fetch("https://www.elprisenligenu.dk");
-		const result = await response;
-		let myData = await result.json();
-		console.log(myData);
-		catagoryrecieved(myData);
-	} catch (caught) {
-		console.log("dummy");
-	} finally {
-		console.log("hello :D");
-	}
-}
-
-
-function readerStatic(appID) {
-	const appContainer = document.getElementById(appID);
-	appContainer.innerHTML = "";
+function createSite() {
+    const appContainer = document.getElementById("appID");
 
     const navheader = document.createElement("header");
     navheader.id = "app-header";
@@ -72,30 +56,17 @@ function readerStatic(appID) {
         }
     }
 
-    appContainer.appendChild(navheader);
     const settingsPage = document.createElement("main");
-    settingsPage.id = "settings-page";
     settingsPage.className = "settings-page";
     settingsPage.hidden = true;
     const settings = createSettings();
-    const closeButton = document.createElement("button");
-    closeButton.id = "settings-close";
-    closeButton.type = "button";
-    closeButton.innerHTML = '<img src="assets/img/miscICONS/circle-xmark-regular-full.svg" alt="">';
-    closeButton.addEventListener("click", () => {
-        showView(previousView);
-    });
-    settings.appendChild(closeButton);
     settingsPage.appendChild(settings);
-    appContainer.appendChild(settingsPage);
+
+    appContainer.append(navheader, settingsPage);
 
     const overview = createOverview();
     const rightNow = createRightNow();
     const history = createHistory();
-
-    appContainer.append(overview, rightNow, history);
-    appContainer.appendChild(footer);
-    appContainer.insertBefore(settingsPage, footer);
 
     const views = {
         overview: overview,
@@ -104,8 +75,6 @@ function readerStatic(appID) {
         settings: settingsPage
     };
     let previousView = "overview";
-
-    let activeView = "overview";
 
     function showView(name) {
         for (const viewName in views) {
@@ -119,8 +88,9 @@ function readerStatic(appID) {
         if (name !== "settings") {
             previousView = name;
         }
-        activeView = name;
     }
+
+    appContainer.append(overview, rightNow, history, footer);
 
     for (const button of navigationButtons) {
         button.addEventListener("click", () => {
@@ -131,19 +101,19 @@ function readerStatic(appID) {
     appContainer.addEventListener("change", (event) => {
         updateFooter();
         if (event.target.id === "region" || event.target.id === "include-tax") {
-            overview.dispatchEvent(new Event("settingschange"));
-            rightNow.dispatchEvent(new Event("settingschange"));
-            history.dispatchEvent(new Event("settingschange"));
+            for (const view of [overview, rightNow, history]) {
+                view.dispatchEvent(new Event("settingschange"));
+            }
         }
     });
 
     settingsButton.addEventListener("click", () => {
-        showView(activeView === "settings" ? previousView : "settings");
+        showView(settingsPage.hidden ? "settings" : previousView);
         updateFooter();
     });
 
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && activeView === "settings") {
+        if (event.key === "Escape" && !settingsPage.hidden) {
             showView(previousView);
         }
     });
@@ -151,4 +121,4 @@ function readerStatic(appID) {
     showView("overview");
     updateFooter();
 }
-readerStatic("appID");
+createSite();

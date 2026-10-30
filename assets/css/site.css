@@ -3,15 +3,16 @@
     --subbackground: #201E1E;
     --maintext: #EBEBEB;
     --subtext: #55EC20;
-    --first: #00ff29;
-    --second: #33ff00;
-    --third: #b8ff22;
-    --fourth: #edff23;
-    --fifth: #ffd645;
-    --sixth: #ff7a00;
-    --seventh: #ff8717;
-    --eigth: #ff4d00;
+    --price-1: #00ff29;
+    --price-2: #33ff00;
+    --price-3: #b8ff22;
+    --price-4: #edff23;
+    --price-5: #ffd645;
+    --price-6: #ff7a00;
+    --price-7: #ff8717;
+    --price-8: #ff4d00;
 }
+
 
 *{
     box-sizing: border-box;
@@ -37,12 +38,10 @@ body{
 }
 
 #app-header{
-    position: static;
     display: grid;
     flex: 0 0 3.25rem;
     grid-template-columns: 3.25rem 1fr;
     align-items: center;
-    min-height: 3.25rem;
     background: var(--subbackground);
 }
 
@@ -95,8 +94,6 @@ body{
 }
 
 #settings-toggle{
-    position: relative;
-    z-index: 1002;
     padding: 0;
     border: 0;
     background: transparent;
@@ -114,7 +111,6 @@ body{
 .rightnow,
 .history,
 .settings-page{
-    position: relative;
     flex: 1 1 0;
     min-width: 0;
     min-height: 0;
@@ -124,6 +120,10 @@ body{
     overflow-y: auto;
     background: var(--mainbackground);
     scrollbar-width: none;
+}
+
+.rightnow{
+    text-align: center;
 }
 
 [hidden]{
@@ -147,20 +147,14 @@ body{
     text-align: right;
 }
 
-.price.low,
-#current-price.low{
-    color: var(--first);
-}
-
-.price.medium,
-#current-price.medium{
-    color: var(--fifth);
-}
-
-.price.high,
-#current-price.high{
-    color: var(--sixth);
-}
+.level-1{ color: var(--price-1); }
+.level-2{ color: var(--price-2); }
+.level-3{ color: var(--price-3); }
+.level-4{ color: var(--price-4); }
+.level-5{ color: var(--price-5); }
+.level-6{ color: var(--price-6); }
+.level-7{ color: var(--price-7); }
+.level-8{ color: var(--price-8); }
 
 .overview h1,
 .rightnow h1,
@@ -222,10 +216,6 @@ body{
     font-size: 0.6875rem;
 }
 
-.rightnow > *{
-    text-align: center;
-}
-
 .rightnow #rightnow-status{
     margin: 0 0 0.5rem;
     font-size: 0.75rem;
@@ -250,8 +240,9 @@ body{
     gap: 0.125rem;
 }
 
-.rightnow__circle strong{
+#current-price{
     font-size: 1.375rem;
+    font-weight: bold;
 }
 
 .rightnow__circle span{
@@ -289,7 +280,6 @@ body{
 }
 
 .settings-page .settings{
-    position: relative;
     width: 100%;
     min-height: 100%;
     padding: 0;
@@ -310,10 +300,6 @@ body{
     gap: 0.75rem;
     color: var(--maintext);
     font-size: 0.5625rem;
-}
-
-.settings-page #settings-close{
-    display: none;
 }
 
 .settings__switch{
@@ -372,10 +358,8 @@ body{
 }
 
 footer{
-    position: static;
     flex: 0 0 3rem;
     width: 100%;
-    height: 3rem;
     margin: 0;
     padding: 0.375rem 0.5rem;
     background: var(--mainbackground);
